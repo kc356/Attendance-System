@@ -10,7 +10,7 @@ import PySimpleGUI as sg
 import smtplib, ssl
 from email.mime.text import MIMEText
 
-def open_window_for_email_button():
+def open_window_for_email_button(cursor, student_name):
     layout = [
         [sg.Text("New Window", key="new")],
         [sg.Button('Send a testing email to me', key='send email')],
@@ -23,8 +23,13 @@ def open_window_for_email_button():
         if event == "Cancel" or event == sg.WIN_CLOSED:
             break
         elif event == 'send email':
+            sql = "SELECT email FROM student WHERE name = '%s'"%(student_name)
+            cursor.execute(sql)
+            extract_data = cursor.fetchall()
+            student_email = extract_data[0][0]
+            # print(student_email)
             send_email = Email()
-            send_email.construct('testing content','u3557110@connect.hku.hk','testing subject')
+            send_email.construct('testing content', student_email,'testing subject')
             send_email.send()
 
     window.close()
@@ -155,7 +160,7 @@ while True:
                 engine.say(hello)
 
 
-                open_window_for_email_button();
+                open_window_for_email_button(cursor, current_name);
                 win.Close()
 
         # If the face is unrecognized
