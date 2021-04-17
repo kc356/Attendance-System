@@ -106,3 +106,4 @@ python faces_gui.py
 
 The camera will be activated and recognize your face using the pretrained model.    
 **You need to** implement other useful functions in this part.
+"# FaceRecognitioin" 
