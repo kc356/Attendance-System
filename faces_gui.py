@@ -10,10 +10,10 @@ import PySimpleGUI as sg
 import smtplib, ssl
 from email.mime.text import MIMEText
 
-def email_to_student(cursor, student_name):
+def coming_class_info(cursor, student_name, course_info):
     layout = [
-        [sg.Text("Email?", key="new")],
-        [sg.Button('Send a testing email to me', key='send email')],
+        [sg.Text(course_info)],
+        [sg.Button('Send the info as a email to me', key='send email')],
         [sg.Cancel()]
         ]
     window = sg.Window("Second Window", layout, modal=True)
@@ -173,8 +173,36 @@ while True:
                 print(hello)
                 # engine.say(hello)
 
-                coming_course(cursor, current_name)
-                email_to_student(cursor, current_name)
+
+                sql = "SELECT student_id FROM student WHERE name = '%s'"%(current_name)
+                cursor.execute(sql)
+                extract_data = cursor.fetchall()
+                student_id = extract_data[0][0]
+
+                sql = "SELECT course_id FROM takes WHERE student_id = '%s'"%(student_id)
+                cursor.execute(sql)
+                extract_data = cursor.fetchall()
+                student_courses = extract_data[0]
+
+                for course in student_courses:
+                    sql = "SELECT * FROM course WHERE courseID = '%s'"%(course)
+                    cursor.execute(sql)
+                    extract_data = cursor.fetchall()
+                    course_info = extract_data[0]
+                    course_start_time = course_info[3]
+                    FMT = '%H:%M:%S'
+                    tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
+                    break
+                print(course_start_time)
+                #test will the function be shown only within 1 hr
+                course_start_time = "18:00:00"
+                FMT = '%H:%M:%S'
+                tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
+
+
+                hour = tdelta.seconds//3600
+                if hour <= 1:
+                    coming_class_info(cursor, current_name, course_info)
                 win.Close()
 
         # If the face is unrecognized
