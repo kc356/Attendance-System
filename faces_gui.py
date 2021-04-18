@@ -10,7 +10,10 @@ import PySimpleGUI as sg
 import smtplib, ssl
 from email.mime.text import MIMEText
 
+
 def coming_class_info(cursor, student_name, course_info):
+    sg.theme('TanBlue')
+
     layout = [
         [sg.Text(course_info)],
         [sg.Button('Send the info as a email to me', key='send email')],
@@ -34,19 +37,19 @@ def coming_class_info(cursor, student_name, course_info):
 
     window.close()
 
-def coming_course():
-    layout = [
-        [sg.Text("Coming course", key="new")],
-        [sg.Text("info of the coming course")],
-        [sg.Cancel()]
-        ]
-    window = sg.Window("Second Window", layout, modal=True)
-    choice = None
-    while True:
-        event, values = window.read()
-        if event == "Cancel" or event == sg.WIN_CLOSED:
-            break
-    window.close()
+# def coming_course():
+#     layout = [
+#         [sg.Text("Coming course", key="new")],
+#         [sg.Text("info of the coming course")],
+#         [sg.Cancel()]
+#         ]
+#     window = sg.Window("Second Window", layout, modal=True)
+#     choice = None
+#     while True:
+#         event, values = window.read()
+#         if event == "Cancel" or event == sg.WIN_CLOSED:
+#             break
+#     window.close()
 
 class Email:
     sender = 'FaceRecognitionDatabase3278@gmail.com'
@@ -89,6 +92,7 @@ cap = cv2.VideoCapture(0)
 
 
 # 3 Define pysimplegui setting
+sg.theme('TanBlue')
 layout =  [
     [sg.Text('Press OK to log in', size=(18,1), font=('Any',18),text_color='#1c86ee' ,justification='left')],
     [sg.OK(), sg.Cancel()]
@@ -193,9 +197,9 @@ while True:
                     FMT = '%H:%M:%S'
                     tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
                     break
-                print(course_start_time)
+
                 #test will the function be shown only within 1 hr
-                course_start_time = "18:00:00"
+                course_start_time = "19:00:00"
                 FMT = '%H:%M:%S'
                 tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
 
@@ -224,6 +228,7 @@ while True:
     imgbytes = cv2.imencode('.png', frame)[1].tobytes()
     if not win_started:
         win_started = True
+        sg.theme('TanBlue')
         layout = [
             [sg.Text('Attendance System Interface', size=(30,1))],
             [sg.Image(data=imgbytes, key='_IMAGE_')],
