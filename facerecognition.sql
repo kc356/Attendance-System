@@ -91,10 +91,11 @@ CREATE TABLE `course` (
   `course_title` varchar(45) DEFAULT NULL,
   `lecture_room_address` varchar(45) DEFAULT NULL,
   `start_time` varchar(45) DEFAULT NULL,
+  `end_time` varchar(45) DEFAULT NULL,
+  `weekday` varchar(10) DEFAULT NULL,
   `teacher_name` varchar(45) DEFAULT NULL,
   `link` varchar(100) DEFAULT NULL,
   `department` varchar(45) DEFAULT NULL,
-  `end_time` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`courseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
