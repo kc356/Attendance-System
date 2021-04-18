@@ -13,9 +13,22 @@ from email.mime.text import MIMEText
 
 def coming_class_info(cursor, student_name, course_info):
     sg.theme('TanBlue')
-
+    courseID = course_info[0]
+    course_title = course_info[1]
+    lecture_room_address = course_info[2]
+    start_time = course_info[3]
+    start_time = course_info[4]
+    weekday = course_info[5]
+    teacher_name = course_info[6]
+    link = course_info[7]
+    department = course_info[8]
     layout = [
-        [sg.Text(course_info)],
+        [sg.Text(course_info[0] + " " + course_info[1], font='Any 20')],
+        [sg.Text(course_info[2], font='Any 15')],
+        [sg.Text(course_info[3] + " - " + course_info[4] + " " + course_info[5], font='Any 15')],
+        [sg.Text("Lecturer: " + course_info[6], font='Any 15')],
+        [sg.Text("Zoom Link: " + course_info[7], font='Any 15')],
+        [sg.Text("From: " + course_info[8] + " Department", font='Any 15')],
         [sg.Button('Send the info as a email to me', key='send email')],
         [sg.Cancel()]
         ]
