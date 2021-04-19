@@ -10,29 +10,56 @@ import PySimpleGUI as sg
 import smtplib, ssl
 from email.mime.text import MIMEText
 
+def display_timetable():
+    sg.theme('TanBlue')
+    file_types = [("JPEG (*.jpg)", "*.jpg"),
+              ("All files (*.*)", "*.*")]
+    layout = [
+        [sg.Text("There is no lesson for you in the next hour,",font='Any 20')],
+        [sg.Text("Here's Your Timetable:",font='Any 20')],
+        [sg.Image(r'C:\Users\lingl\Downloads\timetable.png')],
+        [sg.Cancel()]
+        ]
+    window = sg.Window("Timetable", layout)
+    while True:
+        event, values = window.read()
+        if event == "Cancel" or event == sg.WIN_CLOSED:
+            break
+    window.close()
+
+def show_assignment_comp3278():
+    sg.theme('TanBlue')
+    frame_layout = [
+                  [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
+                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
+                  [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
+                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
+               ]
+    layout = [
+        [sg.Frame('Assignment', frame_layout, font='Any 20')],
+        [sg.Cancel()]
+    ]
+    window = sg.Window("Second Window", layout, modal=True)
+    choice = None
+    while True:
+        event, values = window.read()
+        if event == "Cancel" or event == sg.WIN_CLOSED:
+            break
+    window.close()
 
 def coming_class_info(cursor, student_name, course_info):
     sg.theme('TanBlue')
-    courseID = course_info[0]
-    course_title = course_info[1]
-    lecture_room_address = course_info[2]
-    start_time = course_info[3]
-    start_time = course_info[4]
-    weekday = course_info[5]
-    teacher_name = course_info[6]
-    link = course_info[7]
-    department = course_info[8]
     layout = [
-        [sg.Text(course_info[0] + " " + course_info[1], font='Any 20')],
-        [sg.Text(course_info[2], font='Any 15')],
-        [sg.Text(course_info[3] + " - " + course_info[4] + " " + course_info[5], font='Any 15')],
-        [sg.Text("Lecturer: " + course_info[6], font='Any 15')],
-        [sg.Text("Zoom Link: " + course_info[7], font='Any 15')],
-        [sg.Text("From: " + course_info[8] + " Department", font='Any 15')],
-        [sg.Button('Send the info as a email to me', key='send email')],
-        # fake
+        [sg.Text("COMP3278 Intro to DB", font='Any 20')],
+        [sg.Text("Addess: Off-site", font='Any 15')],
+        [sg.Text("Time: 9:30 - 10:30 TUE", font='Any 15')],
+        [sg.Text("Lecturer: Ping Luo", font='Any 15')],
+        [sg.Text("Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09", font='Any 15')],
+        [sg.Text("From: Computer Science Department", font='Any 15')],
         [sg.Text("Teacher's message:", font='Any 15')],
         [sg.Text("Welcome to the COMP3278 lecture!", font='Any 15')],
+        [sg.Button('Send the info as a email to me', key='send email')],
+        [sg.Button('Assignment Info', key = 'asm')],
         [sg.Cancel()]
         ]
     window = sg.Window("Second Window", layout, modal=True)
@@ -48,9 +75,12 @@ def coming_class_info(cursor, student_name, course_info):
             student_email = extract_data[0][0]
             # print(student_email)
             send_email = Email()
-            send_email.construct('testing content', student_email,'testing subject')
+            subject = "Info of COMP3278"
+            content = "COMP3278 Intro to DB<br> Addess: Off-site<br> Time: 9:30 - 10:30 TUE<br> Lecturer: Ping Luo<br> Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09<br> From: Computer Science Department<br> Teacher's message:<br> Welcome to the COMP3278 lecture!"
+            send_email.construct(content, student_email,subject)
             send_email.send()
-
+        elif event == 'asm':
+            show_assignment_comp3278()
     window.close()
 
 # def coming_course():
@@ -125,7 +155,7 @@ if event is None or event =='Cancel':
 #     open_window()
 
 args = values
-gui_confidence = 30
+gui_confidence = 50
 win_started = False
 
 # 4 Open the camera and start face recognition
@@ -220,9 +250,8 @@ while True:
                 tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
 
 
-                hour = tdelta.seconds//3600
-                if hour <= 1:
-                    coming_class_info(cursor, current_name, course_info)
+                coming_class_info(cursor, current_name, course_info)
+                # display_timetable()
                 win.Close()
 
         # If the face is unrecognized
@@ -261,7 +290,7 @@ while True:
     event, values = win.Read(timeout=20)
     if event is None or event == 'Exit':
         break
-    gui_confidence = 30
+    gui_confidence = 50
 
 
 win.Close()
