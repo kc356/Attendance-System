@@ -56,27 +56,42 @@ def coming_class_info(cursor, student_name, course_info):
                   [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
                ]
+
+    zoom_frame_layout = [
+        [sg.Text("https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09", font='Any 15')]
+    ]
+
+    lecture_notes_frame_layout = [
+        [sg.Text("https://moodle.hku.hk/course/view.php?id=80047", font='Any 15')]
+    ]
     tab2_layout = [
         [sg.Frame('Assignment', tab2_frame_layout, font='Any 20')],
+        [sg.Frame('Zoom link', zoom_frame_layout, font='Any 20')],
+        [sg.Frame('Lecture note link', lecture_notes_frame_layout, font='Any 20')],
         [sg.Cancel()]
     ]
 
-    tab1_layout = [
-        [sg.Text("COMP3278 Intro to DB", font='Any 20')],
+    teacher_message = [
+        [sg.Text("Welcome to the COMP3278 lecture!", font='Any 15')]
+    ]
+
+    class_info = [
         [sg.Text("Addess: Off-site", font='Any 15')],
         [sg.Text("Time: 9:30 - 10:30 TUE", font='Any 15')],
         [sg.Text("Lecturer: Ping Luo", font='Any 15')],
         [sg.Text("Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09", font='Any 15')],
-        [sg.Text("From: Computer Science Department", font='Any 15')],
-        [sg.Text("Teacher's message:", font='Any 15')],
-        [sg.Text("Welcome to the COMP3278 lecture!", font='Any 15')],
+        [sg.Text("From: Computer Science Department", font='Any 15')]
+    ]
+
+    tab1_layout = [
+        [sg.Frame("COMP3278 Intro to DB", class_info, font='Any 20')],
+        [sg.Frame("Teacher's message:", teacher_message, font='Any 20')],
         [sg.Button('Send the info as a email to me', key='send email')],
-        # [sg.Button('Assignment Info', key = 'asm')],
         [sg.Cancel()]
         ]
 
     layout = [
-        [sg.TabGroup([[sg.Tab('Tab 1', tab1_layout), sg.Tab('Tab 2', tab2_layout)]])]
+        [sg.TabGroup([[sg.Tab('Course Info', tab1_layout), sg.Tab('Course Materials', tab2_layout)]])]
         ]
 
     window = sg.Window("Second Window", layout, modal=True)
@@ -93,7 +108,27 @@ def coming_class_info(cursor, student_name, course_info):
             # print(student_email)
             send_email = Email()
             subject = "Info of COMP3278"
-            content = "COMP3278 Intro to DB<br> Addess: Off-site<br> Time: 9:30 - 10:30 TUE<br> Lecturer: Ping Luo<br> Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09<br> From: Computer Science Department<br> Teacher's message:<br> Welcome to the COMP3278 lecture!"
+            content = """COMP3278 Intro to DB<br>
+                        Addess: Off-site<br>
+                        Time: 9:30 - 10:30 TUE<br>
+                         Lecturer: Ping Luo<br>
+                         Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09<br>
+                         From: Computer Science Department<br>
+                         <br>
+                          Teacher's message:<br>
+                           Welcome to the COMP3278 lecture!<br>
+                           <br>
+                           Assignment: <br>
+                           Assignment 2, due on 21/4 <br>
+                           https://moodle.hku.hk/mod/assign/view.php?id=2142773 <br>
+                           Assignment 3, due on 21/4 <br>
+                           https://moodle.hku.hk/mod/assign/view.php?id=2108908 <br>
+                           <br>
+                           Zoom link: <br>
+                           https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09 <br>
+                           Lecture note link <br>
+                           https://moodle.hku.hk/course/view.php?id=80047 <br>
+                           """
             send_email.construct(content, student_email,subject)
             send_email.send()
         elif event == 'asm':
