@@ -11,7 +11,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 
 def display_timetable():
-    sg.theme('DarkAmber')
+    sg.theme('DarkBlue')
     file_types = [("JPEG (*.jpg)", "*.jpg"),
               ("All files (*.*)", "*.*")]
     layout = [
@@ -28,7 +28,7 @@ def display_timetable():
     window.close()
 
 def show_assignment_comp3278():
-    sg.theme('DarkAmber')
+    sg.theme('DarkBlue')
     frame_layout = [
                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
@@ -48,7 +48,7 @@ def show_assignment_comp3278():
     window.close()
 
 def coming_class_info(cursor, student_name, course_info):
-    sg.theme('DarkAmber')
+    sg.theme('DarkBlue')
 
     tab2_frame_layout = [
                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
@@ -67,8 +67,7 @@ def coming_class_info(cursor, student_name, course_info):
     tab2_layout = [
         [sg.Frame('Assignment', tab2_frame_layout, font='Any 20')],
         [sg.Frame('Zoom link', zoom_frame_layout, font='Any 20')],
-        [sg.Frame('Lecture note link', lecture_notes_frame_layout, font='Any 20')],
-        [sg.Cancel()]
+        [sg.Frame('Lecture note link', lecture_notes_frame_layout, font='Any 20')]
     ]
 
     teacher_message = [
@@ -131,6 +130,17 @@ def coming_class_info(cursor, student_name, course_info):
                            """
             send_email.construct(content, student_email,subject)
             send_email.send()
+            confirmation_layout = [
+                [sg.Text("Email is sent!", font='Any 15')],
+                [sg.Cancel()]
+            ]
+            email_window = sg.Window("Email is sent", confirmation_layout, modal=True)
+            choice = None
+            while True:
+                event, values = email_window.read()
+                if event == "Cancel" or event == sg.WIN_CLOSED:
+                    break
+            email_window.close()
         elif event == 'asm':
             show_assignment_comp3278()
     window.close()
@@ -177,7 +187,7 @@ cap = cv2.VideoCapture(0)
 
 
 # 3 Define pysimplegui setting
-sg.theme('DarkAmber')
+sg.theme('DarkBlue')
 layout =  [
     [sg.Text('Press OK to log in', size=(18,1), font=('Any',18),justification='left')],
     [sg.OK(), sg.Cancel()]
@@ -312,7 +322,7 @@ while True:
     imgbytes = cv2.imencode('.png', frame)[1].tobytes()
     if not win_started:
         win_started = True
-        sg.theme('DarkAmber')
+        sg.theme('DarkBlue')
         layout = [
             [sg.Text('Attendance System Interface', size=(30,1))],
             [sg.Image(data=imgbytes, key='_IMAGE_')],
