@@ -11,7 +11,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 
 def display_timetable():
-    sg.theme('TanBlue')
+    sg.theme('DarkAmber')
     file_types = [("JPEG (*.jpg)", "*.jpg"),
               ("All files (*.*)", "*.*")]
     layout = [
@@ -28,7 +28,7 @@ def display_timetable():
     window.close()
 
 def show_assignment_comp3278():
-    sg.theme('TanBlue')
+    sg.theme('DarkAmber')
     frame_layout = [
                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
@@ -48,7 +48,7 @@ def show_assignment_comp3278():
     window.close()
 
 def coming_class_info(cursor, student_name, course_info):
-    sg.theme('TanBlue')
+    sg.theme('DarkAmber')
 
     tab2_frame_layout = [
                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
@@ -135,19 +135,6 @@ def coming_class_info(cursor, student_name, course_info):
             show_assignment_comp3278()
     window.close()
 
-# def coming_course():
-#     layout = [
-#         [sg.Text("Coming course", key="new")],
-#         [sg.Text("info of the coming course")],
-#         [sg.Cancel()]
-#         ]
-#     window = sg.Window("Second Window", layout, modal=True)
-#     choice = None
-#     while True:
-#         event, values = window.read()
-#         if event == "Cancel" or event == sg.WIN_CLOSED:
-#             break
-#     window.close()
 
 class Email:
     sender = 'FaceRecognitionDatabase3278@gmail.com'
@@ -190,9 +177,9 @@ cap = cv2.VideoCapture(0)
 
 
 # 3 Define pysimplegui setting
-sg.theme('TanBlue')
+sg.theme('DarkAmber')
 layout =  [
-    [sg.Text('Press OK to log in', size=(18,1), font=('Any',18),text_color='#1c86ee' ,justification='left')],
+    [sg.Text('Press OK to log in', size=(18,1), font=('Any',18),justification='left')],
     [sg.OK(), sg.Cancel()]
       ]
 win = sg.Window('Attendance System',
@@ -325,7 +312,7 @@ while True:
     imgbytes = cv2.imencode('.png', frame)[1].tobytes()
     if not win_started:
         win_started = True
-        sg.theme('TanBlue')
+        sg.theme('DarkAmber')
         layout = [
             [sg.Text('Attendance System Interface', size=(30,1))],
             [sg.Image(data=imgbytes, key='_IMAGE_')],
