@@ -35,7 +35,7 @@ def show_assignment_comp3278():
                   [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
                ]
-    layout = [
+    table2_layout = [
         [sg.Frame('Assignment', frame_layout, font='Any 20')],
         [sg.Cancel()]
     ]
@@ -49,7 +49,19 @@ def show_assignment_comp3278():
 
 def coming_class_info(cursor, student_name, course_info):
     sg.theme('TanBlue')
-    layout = [
+
+    tab2_frame_layout = [
+                  [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
+                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
+                  [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
+                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
+               ]
+    tab2_layout = [
+        [sg.Frame('Assignment', tab2_frame_layout, font='Any 20')],
+        [sg.Cancel()]
+    ]
+
+    tab1_layout = [
         [sg.Text("COMP3278 Intro to DB", font='Any 20')],
         [sg.Text("Addess: Off-site", font='Any 15')],
         [sg.Text("Time: 9:30 - 10:30 TUE", font='Any 15')],
@@ -59,9 +71,14 @@ def coming_class_info(cursor, student_name, course_info):
         [sg.Text("Teacher's message:", font='Any 15')],
         [sg.Text("Welcome to the COMP3278 lecture!", font='Any 15')],
         [sg.Button('Send the info as a email to me', key='send email')],
-        [sg.Button('Assignment Info', key = 'asm')],
+        # [sg.Button('Assignment Info', key = 'asm')],
         [sg.Cancel()]
         ]
+
+    layout = [
+        [sg.TabGroup([[sg.Tab('Tab 1', tab1_layout), sg.Tab('Tab 2', tab2_layout)]])]
+        ]
+
     window = sg.Window("Second Window", layout, modal=True)
     choice = None
     while True:
