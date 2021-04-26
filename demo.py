@@ -27,26 +27,6 @@ def display_timetable():
             break
     window.close()
 
-# def show_assignment_comp3278():
-#     sg.theme('DarkBlue')
-#     frame_layout = [
-#                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
-#                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
-#                   [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
-#                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
-#                ]
-#     table2_layout = [
-#         [sg.Frame('Task', frame_layout, font='Any 20')],
-#         [sg.Cancel()]
-#     ]
-#     window = sg.Window("Second Window", layout, modal=True)
-#     choice = None
-#     while True:
-#         event, values = window.read()
-#         if event == "Cancel" or event == sg.WIN_CLOSED:
-#             break
-#     window.close()
-
 def coming_class_info(cursor, student_name, course_info):
     sg.theme('DarkBlue')
 
@@ -64,6 +44,7 @@ def coming_class_info(cursor, student_name, course_info):
     lecture_notes = course_info[9]
 
     tab2_frame_layout = []
+    # different container containning information of course, asm, teacher message etc
     # fetch data from Task
     sql = "SELECT * FROM task WHERE course = '%s'"%(courseID)
     cursor.execute(sql)
@@ -71,24 +52,15 @@ def coming_class_info(cursor, student_name, course_info):
     for asm in extract_data_asm:
         tab2_frame_layout.append([sg.Text(asm[1], font='Any 15')])
         tab2_frame_layout.append([sg.Text(asm[2], font='Any 15')])
-
     zoom_frame_layout = [
         [sg.Text(zoom_link, font='Any 15')]
     ]
-
     lecture_notes_frame_layout = [
         [sg.Text(lecture_notes , font='Any 15')]
     ]
-    tab2_layout = [
-        [sg.Frame('Task', tab2_frame_layout, font='Any 20')],
-        [sg.Frame('Zoom link', zoom_frame_layout, font='Any 20')],
-        [sg.Frame('Lecture note link', lecture_notes_frame_layout, font='Any 20')]
-    ]
-
     teacher_message = [
         [sg.Text(message, font='Any 15')]
     ]
-
     class_info = [
         [sg.Text("Addess: " + lecture_room_address, font='Any 15')],
         [sg.Text("Time: " + start_time + " - " + end_time, font='Any 15')],
@@ -96,12 +68,18 @@ def coming_class_info(cursor, student_name, course_info):
         [sg.Text("From: " + department, font='Any 15')]
     ]
 
+# tab layout
     tab1_layout = [
         [sg.Frame(courseID + course_title, class_info, font='Any 20')],
         [sg.Frame("Teacher's message:", teacher_message, font='Any 20')],
         [sg.Button('Send the info as a email to me', key='send email')],
         [sg.Cancel()]
         ]
+    tab2_layout = [
+        [sg.Frame('Task', tab2_frame_layout, font='Any 20')],
+        [sg.Frame('Zoom link', zoom_frame_layout, font='Any 20')],
+        [sg.Frame('Lecture note link', lecture_notes_frame_layout, font='Any 20')]
+    ]
 
     layout = [
         [sg.TabGroup([[sg.Tab('Course Info', tab1_layout), sg.Tab('Course Materials', tab2_layout)]])]
@@ -156,9 +134,10 @@ def coming_class_info(cursor, student_name, course_info):
         #     show_assignment_comp3278()
     window.close()
 
-
+# class that construct email
 class Email:
     sender = 'FaceRecognitionDatabase3278@gmail.com'
+    # configuration of the email
     def construct(self, new_content, receiver_email, new_subj):
         self.msg = MIMEText(new_content, 'html')
         self.msg['From'] = self.sender
