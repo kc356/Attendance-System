@@ -215,7 +215,7 @@ while True:
                     break
 
                 #test will the function be shown only within 1 hr
-                course_start_time = "19:00:00"
+                course_start_time = "11:30:00"
                 FMT = '%H:%M:%S'
                 tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
 

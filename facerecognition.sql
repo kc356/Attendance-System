@@ -96,6 +96,8 @@ CREATE TABLE `course` (
   `teacher_name` varchar(45) DEFAULT NULL,
   `link` varchar(100) DEFAULT NULL,
   `department` varchar(45) DEFAULT NULL,
+  `LectureNotes` varchar(50) DEFAULT NULL,
+  `TeacherMessage` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`courseID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -238,7 +240,8 @@ CREATE TABLE `student` (
   `login_date` date NOT NULL,
   `enrollment_time` date DEFAULT NULL,
   `major` varchar(50) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL
+  `email` varchar(45) DEFAULT NULL,
+  `timetable` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -330,6 +333,7 @@ CREATE TABLE `task` (
   `taskID` varchar(45) NOT NULL,
   `task_name` varchar(45) DEFAULT NULL,
   `task_link` varchar(45) DEFAULT NULL,
+  `course` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`taskID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

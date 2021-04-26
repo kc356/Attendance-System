@@ -50,6 +50,20 @@ def show_assignment_comp3278():
 def coming_class_info(cursor, student_name, course_info):
     sg.theme('DarkBlue')
 
+    # course data fetch from database
+    courseID = course_info[0]
+    course_title = course_info[1]
+    lecture_room_address = course_info[2]
+    start_time = course_info[3]
+    end_time = course_info[4]
+    weekday = course_info[5]
+    teacher_name = course_info[6]
+    zoom_link = course_info[7]
+    department = course_info[8]
+    # teacher_message =
+    # lecture_notes =
+
+# for loop contain asm
     tab2_frame_layout = [
                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
@@ -58,7 +72,7 @@ def coming_class_info(cursor, student_name, course_info):
                ]
 
     zoom_frame_layout = [
-        [sg.Text("https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09", font='Any 15')]
+        [sg.Text(zoom_link, font='Any 15')]
     ]
 
     lecture_notes_frame_layout = [
@@ -71,19 +85,18 @@ def coming_class_info(cursor, student_name, course_info):
     ]
 
     teacher_message = [
-        [sg.Text("Welcome to the COMP3278 lecture!", font='Any 15')]
+        [sg.Text("Welcome to the " + courseID + course_title + " lecture!", font='Any 15')]
     ]
 
     class_info = [
-        [sg.Text("Addess: Off-site", font='Any 15')],
-        [sg.Text("Time: 9:30 - 10:30 TUE", font='Any 15')],
-        [sg.Text("Lecturer: Ping Luo", font='Any 15')],
-        [sg.Text("Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09", font='Any 15')],
-        [sg.Text("From: Computer Science Department", font='Any 15')]
+        [sg.Text("Addess: " + lecture_room_address, font='Any 15')],
+        [sg.Text("Time: " + start_time + " - " + end_time, font='Any 15')],
+        [sg.Text("Lecturer: " + teacher_name , font='Any 15')],
+        [sg.Text("From: " + department, font='Any 15')]
     ]
 
     tab1_layout = [
-        [sg.Frame("COMP3278 Intro to DB", class_info, font='Any 20')],
+        [sg.Frame(courseID + course_title, class_info, font='Any 20')],
         [sg.Frame("Teacher's message:", teacher_message, font='Any 20')],
         [sg.Button('Send the info as a email to me', key='send email')],
         [sg.Cancel()]
@@ -106,28 +119,45 @@ def coming_class_info(cursor, student_name, course_info):
             student_email = extract_data[0][0]
             # print(student_email)
             send_email = Email()
-            subject = "Info of COMP3278"
-            content = """COMP3278 Intro to DB<br>
-                        Addess: Off-site<br>
-                        Time: 9:30 - 10:30 TUE<br>
-                         Lecturer: Ping Luo<br>
-                         Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09<br>
-                         From: Computer Science Department<br>
-                         <br>
-                          Teacher's message:<br>
-                           Welcome to the COMP3278 lecture!<br>
-                           <br>
-                           Assignment: <br>
-                           Assignment 2, due on 21/4 <br>
-                           https://moodle.hku.hk/mod/assign/view.php?id=2142773 <br>
-                           Assignment 3, due on 21/4 <br>
-                           https://moodle.hku.hk/mod/assign/view.php?id=2108908 <br>
-                           <br>
-                           Zoom link: <br>
-                           https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09 <br>
-                           Lecture note link <br>
-                           https://moodle.hku.hk/course/view.php?id=80047 <br>
-                           """
+            subject = "Info of " + courseID
+            content = courseID + " " + course_title + "<br>"
+            content += "Addess: " + lecture_room_address + "<br>"
+            content += "Time: " + start_time + " - " + end_time + "<br>"
+            content += "Lecturer: " + teacher_name + "<br>"
+            content += "From: " + department + "<br><br>"
+            content += "Teacher's message: <br>"
+            # assignment for loop
+            content += " Assignment: <br>"
+
+            content += 'Zoom link: <br>' + zoom_link + "<br>"
+            # lecture_notes link
+            content +=  'Lecture note link: <br>'
+
+
+
+
+
+            # """COMP3278 Intro to DB<br>
+            #             Addess: Off-site<br>
+            #             Time: 9:30 - 10:30 TUE<br>
+            #              Lecturer: Ping Luo<br>
+            #              Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09<br>
+            #              From: Computer Science Department<br>
+            #              <br>
+            #               Teacher's message:<br>
+            #                Welcome to the COMP3278 lecture!<br>
+            #                <br>
+            #                Assignment: <br>
+            #                Assignment 2, due on 21/4 <br>
+            #                https://moodle.hku.hk/mod/assign/view.php?id=2142773 <br>
+            #                Assignment 3, due on 21/4 <br>
+            #                https://moodle.hku.hk/mod/assign/view.php?id=2108908 <br>
+            #                <br>
+            #                Zoom link: <br>
+            #                https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09 <br>
+            #                Lecture note link <br>
+            #                https://moodle.hku.hk/course/view.php?id=80047 <br>
+            #                """
             send_email.construct(content, student_email,subject)
             send_email.send()
             confirmation_layout = [

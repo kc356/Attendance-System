@@ -23,8 +23,13 @@ today_date = date.today().strftime('%Y-%m-%d')
 # val = ("comp3278", "Intro to DB", "off-site", "17:00:00", "20:00:00", "Sunday", "Ping Luo", "https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09", "Computer Science")
 # cursor.execute(sql, val)
 
-sql = "INSERT INTO takes (student_id, course_id) VALUES (%s, %s)"
+# sql = "INSERT INTO takes (student_id, course_id) VALUES (%s, %s)"
+# val = ("1", "comp3278")
+# cursor.execute(sql, val)
+
+sql = "INSERT INTO message (message_id, course_id) VALUES (%s, %s)"
 val = ("1", "comp3278")
 cursor.execute(sql, val)
+
 
 myconn.commit()
