@@ -27,25 +27,25 @@ def display_timetable():
             break
     window.close()
 
-def show_assignment_comp3278():
-    sg.theme('DarkBlue')
-    frame_layout = [
-                  [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
-                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
-                  [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
-                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
-               ]
-    table2_layout = [
-        [sg.Frame('Assignment', frame_layout, font='Any 20')],
-        [sg.Cancel()]
-    ]
-    window = sg.Window("Second Window", layout, modal=True)
-    choice = None
-    while True:
-        event, values = window.read()
-        if event == "Cancel" or event == sg.WIN_CLOSED:
-            break
-    window.close()
+# def show_assignment_comp3278():
+#     sg.theme('DarkBlue')
+#     frame_layout = [
+#                   [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
+#                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
+#                   [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
+#                   [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
+#                ]
+#     table2_layout = [
+#         [sg.Frame('Task', frame_layout, font='Any 20')],
+#         [sg.Cancel()]
+#     ]
+#     window = sg.Window("Second Window", layout, modal=True)
+#     choice = None
+#     while True:
+#         event, values = window.read()
+#         if event == "Cancel" or event == sg.WIN_CLOSED:
+#             break
+#     window.close()
 
 def coming_class_info(cursor, student_name, course_info):
     sg.theme('DarkBlue')
@@ -60,32 +60,33 @@ def coming_class_info(cursor, student_name, course_info):
     teacher_name = course_info[6]
     zoom_link = course_info[7]
     department = course_info[8]
-    # teacher_message =
-    # lecture_notes =
+    message = course_info[10]
+    lecture_notes = course_info[9]
 
-# for loop contain asm
-    tab2_frame_layout = [
-                  [sg.Text("Assignment 2, due on 21/4", font='Any 15')],
-                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2142773", font='Any 15')],
-                  [sg.Text("Assignment 3, due on 21/4", font='Any 15')],
-                  [sg.Text("https://moodle.hku.hk/mod/assign/view.php?id=2108908", font='Any 15')],
-               ]
+    tab2_frame_layout = []
+    # fetch data from Task
+    sql = "SELECT * FROM task WHERE course = '%s'"%(courseID)
+    cursor.execute(sql)
+    extract_data_asm = cursor.fetchall()
+    for asm in extract_data_asm:
+        tab2_frame_layout.append([sg.Text(asm[1], font='Any 15')])
+        tab2_frame_layout.append([sg.Text(asm[2], font='Any 15')])
 
     zoom_frame_layout = [
         [sg.Text(zoom_link, font='Any 15')]
     ]
 
     lecture_notes_frame_layout = [
-        [sg.Text("https://moodle.hku.hk/course/view.php?id=80047", font='Any 15')]
+        [sg.Text(lecture_notes , font='Any 15')]
     ]
     tab2_layout = [
-        [sg.Frame('Assignment', tab2_frame_layout, font='Any 20')],
+        [sg.Frame('Task', tab2_frame_layout, font='Any 20')],
         [sg.Frame('Zoom link', zoom_frame_layout, font='Any 20')],
         [sg.Frame('Lecture note link', lecture_notes_frame_layout, font='Any 20')]
     ]
 
     teacher_message = [
-        [sg.Text("Welcome to the " + courseID + course_title + " lecture!", font='Any 15')]
+        [sg.Text(message, font='Any 15')]
     ]
 
     class_info = [
@@ -125,39 +126,19 @@ def coming_class_info(cursor, student_name, course_info):
             content += "Time: " + start_time + " - " + end_time + "<br>"
             content += "Lecturer: " + teacher_name + "<br>"
             content += "From: " + department + "<br><br>"
-            content += "Teacher's message: <br>"
+            content += "Teacher's message: <br>" + message + "<br>"+ "<br>"
+
             # assignment for loop
             content += " Assignment: <br>"
-
-            content += 'Zoom link: <br>' + zoom_link + "<br>"
+            for asm in extract_data_asm:
+                content += asm[1] + "<br>"
+                content += asm[2] + "<br>"
+            content += "<br>"
+            content += 'Zoom link: <br>' + zoom_link + "<br>" + "<br>"
             # lecture_notes link
             content +=  'Lecture note link: <br>'
+            content += lecture_notes
 
-
-
-
-
-            # """COMP3278 Intro to DB<br>
-            #             Addess: Off-site<br>
-            #             Time: 9:30 - 10:30 TUE<br>
-            #              Lecturer: Ping Luo<br>
-            #              Zoom Link: https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09<br>
-            #              From: Computer Science Department<br>
-            #              <br>
-            #               Teacher's message:<br>
-            #                Welcome to the COMP3278 lecture!<br>
-            #                <br>
-            #                Assignment: <br>
-            #                Assignment 2, due on 21/4 <br>
-            #                https://moodle.hku.hk/mod/assign/view.php?id=2142773 <br>
-            #                Assignment 3, due on 21/4 <br>
-            #                https://moodle.hku.hk/mod/assign/view.php?id=2108908 <br>
-            #                <br>
-            #                Zoom link: <br>
-            #                https://hku.zoom.us/j/97686555806?pwd=NWxSNVRKTlNDU0NjYTgremxaQ3pldz09 <br>
-            #                Lecture note link <br>
-            #                https://moodle.hku.hk/course/view.php?id=80047 <br>
-            #                """
             send_email.construct(content, student_email,subject)
             send_email.send()
             confirmation_layout = [
@@ -171,8 +152,8 @@ def coming_class_info(cursor, student_name, course_info):
                 if event == "Cancel" or event == sg.WIN_CLOSED:
                     break
             email_window.close()
-        elif event == 'asm':
-            show_assignment_comp3278()
+        # elif event == 'asm':
+        #     show_assignment_comp3278()
     window.close()
 
 

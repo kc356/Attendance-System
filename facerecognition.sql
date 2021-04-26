@@ -332,8 +332,9 @@ DROP TABLE IF EXISTS `task`;
 CREATE TABLE `task` (
   `taskID` varchar(45) NOT NULL,
   `task_name` varchar(45) DEFAULT NULL,
-  `task_link` varchar(45) DEFAULT NULL,
+  `task_link` varchar(100) DEFAULT NULL,
   `course` varchar(45) DEFAULT NULL,
+  `deadline` date DEFAULT NULL,
   PRIMARY KEY (`taskID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
