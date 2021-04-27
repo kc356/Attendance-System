@@ -11,13 +11,20 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 
 def display_timetable():
+    select = "SELECT timetable FROM Student WHERE student_id=1"
+    cursor.execute(select)
+    result = cursor.fetchall()
+    URL=result[0][0]
+    with urllib.request.urlopen(URL) as url:
+        with open('temp.jpg', 'wb') as f:
+            f.write(url.read())
     sg.theme('DarkBlue')
     file_types = [("JPEG (*.jpg)", "*.jpg"),
               ("All files (*.*)", "*.*")]
     layout = [
         [sg.Text("There is no lesson for you in the next hour,",font='Any 20')],
         [sg.Text("Here's Your Timetable:",font='Any 20')],
-        [sg.Image(r'C:\Users\lingl\Downloads\timetable.png')],
+        [sg.Image('temp.jpg')],
         [sg.Cancel()]
         ]
     window = sg.Window("Timetable", layout)
@@ -248,7 +255,6 @@ while True:
                         will be presented in the GUI.
                     if the student does not have class at the moment, the GUI presents a personal class
                         timetable for the student.
-
                 """
                 update =  "UPDATE Student SET login_date=%s WHERE name=%s"
                 val = (date, current_name)
@@ -284,12 +290,15 @@ while True:
                     break
 
                 #test will the function be shown only within 1 hr
-                course_start_time = "19:00:00"
+                course_start_time = "00:30:00"
                 FMT = '%H:%M:%S'
                 tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
 
-
-                coming_class_info(cursor, current_name, course_info)
+                hour = tdelta.seconds//3600
+                if hour <= 1:
+                    coming_class_info(cursor, current_name, course_info)
+                else:
+                    display_timetable()
                 # display_timetable()
                 win.Close()
 

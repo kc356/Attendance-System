@@ -12,8 +12,13 @@ cursor = myconn.cursor()
 now_time = datetime.now().strftime('%H:%M:%S')
 today_date = date.today().strftime('%Y-%m-%d')
 
+"""
 sql = "INSERT INTO student (student_id, name, login_time, login_date, enrollment_time, major, email) VALUES (%s, %s, %s,%s,%s,%s,%s)"
-val = ("1", "Jack", now_time, today_date, "2018-09-01", "CE", "u3557110@connect.hku.hk")
+val = ("456", "JACK", now_time, today_date, "2018-09-01", "CE", "u3557110@connect.hku.hk")
+cursor.execute(sql, val)
+
+sql = "INSERT INTO takes (student_id, course_id) VALUES (%s, %s)"
+val = ("456", "comp3278")
 cursor.execute(sql, val)
 
 sql = "UPDATE student SET email = 'u3557110@connect.hku.hk' WHERE student_id = '1'"
@@ -27,8 +32,13 @@ sql = "INSERT INTO takes (student_id, course_id) VALUES (%s, %s)"
 val = ("1", "comp3278")
 cursor.execute(sql, val)
 
-sql = "INSERT INTO task (taskID, task_name, task_link, course, deadline) VALUES (%s, %s, %s, %s, %s)"
-val = ("COMP3278A1", "comp3278 assignment 1", "https://moodle.hku.hk/mod/assign/view.php?id=2122334", "COMP3278", "2021-04-26")
+sql = "INSERT INTO task (taskID, task_name, task_link, course) VALUES (%s, %s, %s, %s)"
+val = ("COMP3278A1", "comp3278 assignment 1", "https://moodle.hku.hk/mod/assign/view.php?id=2122334", "COMP3278")
 cursor.execute(sql, val)
+"""
+sql = "UPDATE student SET timetable = 'http://59.148.246.6:11180/Schedule.png' WHERE student_id = '1'"
+cursor.execute(sql)
+
+
 
 myconn.commit()
