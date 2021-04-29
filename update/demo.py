@@ -4,17 +4,18 @@ import mysql.connector
 import cv2
 import pyttsx3
 import pickle
-from datetime import datetime, date
+from datetime import datetime
 import sys
 import PySimpleGUI as sg
 import smtplib, ssl
 from email.mime.text import MIMEText
 
-def display_timetable(student_id):
-    select = "SELECT timetable FROM Student WHERE student_id={}".format(student_id)
+def display_timetable():
+    select = "SELECT timetable FROM Student WHERE student_id=456"
     cursor.execute(select)
     result = cursor.fetchall()
     URL=result[0][0]
+    print(URL)
     with urllib.request.urlopen(URL) as url:
         with open('temp.jpg', 'wb') as f:
             f.write(url.read())
@@ -126,7 +127,8 @@ def coming_class_info(cursor, student_name, course_info):
     tab1_layout = [
         [sg.Frame(courseID + course_title, class_info, font='Any 20')],
         [sg.Frame("Teacher's message:", teacher_message, font='Any 20')],
-        [sg.Button('Send the info as a email to me', key='send email')]
+        [sg.Button('Send the info as a email to me', key='send email')],
+        [sg.Cancel()]
         ]
     tab2_layout = [
         [sg.Frame('Task', tab2_frame_layout, font='Any 20')],
@@ -208,7 +210,7 @@ class Email:
         s.quit()
 
 # 1 Create database connection
-myconn = mysql.connector.connect(host="localhost", user="root", passwd="00624ckn", database="facerecognition")
+myconn = mysql.connector.connect(host="localhost", user="root", passwd="ngs7e6w9rk", database="facerecognition")
 date = datetime.utcnow()
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
@@ -324,14 +326,11 @@ while True:
                 cursor.execute(sql)
                 extract_data = cursor.fetchall()
                 student_id = extract_data[0][0]
-                # print(student_id)
 
-                # select from table takes to get what courses were taken by the student
-                sql = "SELECT course_id FROM takes WHERE student_id = '{}'".format(student_id)
+                sql = "SELECT course_id FROM takes WHERE student_id = '%s'"%(student_id)
                 cursor.execute(sql)
                 extract_data = cursor.fetchall()
-                student_courses = extract_data
-
+                student_courses = extract_data[0]
 
                 # account_log
                 date = datetime.utcnow()
@@ -346,33 +345,26 @@ while True:
                 myconn.commit()
                 print("account logged", str(now))
 
-                # today's weekday
-                week=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-                today_weekday = week[date.today().weekday()]
-
                 for course in student_courses:
-                    sql = "SELECT * FROM course WHERE courseID = '%s'"%(course[0])
+                    sql = "SELECT * FROM course WHERE courseID = '%s'"%(course)
                     cursor.execute(sql)
                     extract_data = cursor.fetchall()
                     course_info = extract_data[0]
                     course_start_time = course_info[3]
                     FMT = '%H:%M:%S'
                     tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
-                    hour = tdelta.seconds//3600
-                    # have lecture today, but check whethere there is lecture in the coming hour
-                    if hour <= 1:
-                        break
-                    else:
-                        hour = 100
+                    break
 
                 #test will the function be shown only within 1 hr
-                # course_start_time = "00:30:00"
-                # FMT = '%H:%M:%S'
-                # tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
-                if hour <= 1:
+                course_start_time = "00:30:00"
+                FMT = '%H:%M:%S'
+                tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
+
+                hour = tdelta.seconds//3600
+                if hour > 1:
                     coming_class_info(cursor, current_name, course_info)
                 else:
-                    display_timetable(student_id)
+                    display_timetable()
                 # display_timetable()
                 win.Close()
 
