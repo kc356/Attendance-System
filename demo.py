@@ -356,12 +356,14 @@ while True:
                     extract_data = cursor.fetchall()
                     course_info = extract_data[0]
                     course_start_time = course_info[3]
-                    FMT = '%H:%M:%S'
-                    tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
-                    hour = tdelta.seconds//3600
-                    # have lecture today, but check whethere there is lecture in the coming hour
-                    if hour <= 1:
-                        break
+                    course_weekday = course_info[5]
+                    if course_weekday == today_weekday:
+                        FMT = '%H:%M:%S'
+                        tdelta = datetime.strptime(course_start_time, FMT) - datetime.strptime(current_time, FMT)
+                        hour = tdelta.seconds//3600
+                        # have lecture today, but check whethere there is lecture in the coming hour
+                        if hour <= 1:
+                            break
                     else:
                         hour = 100
 
